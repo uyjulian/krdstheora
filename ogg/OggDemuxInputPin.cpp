@@ -54,9 +54,9 @@ HRESULT OggDemuxInputPin::CheckMediaType(const CMediaType* inMediaType)
         hr = S_OK;
     }
 
-    LOG(logDEBUG) << __FUNCTIONW__ << " Media type " << (hr == S_OK ? "OK" : "*not* OK");
-    LOG(logDEBUG) << __FUNCTIONW__ << " Majortype: " << ToString(inMediaType->majortype); 
-    LOG(logDEBUG) << __FUNCTIONW__ << " Subtype: " << ToString(inMediaType->subtype); 
+    LOG(logDEBUG) << __FUNCTION__ << " Media type " << (hr == S_OK ? "OK" : "*not* OK");
+    LOG(logDEBUG) << __FUNCTION__ << " Majortype: " << ToString(inMediaType->majortype); 
+    LOG(logDEBUG) << __FUNCTION__ << " Subtype: " << ToString(inMediaType->subtype); 
 
     return hr;
 }
@@ -70,8 +70,8 @@ HRESULT OggDemuxInputPin::GetMediaType(int iPosition, CMediaType* outMediaType)
     }
     *outMediaType = m_mediaType;
 
-    LOG(logDEBUG) << __FUNCTIONW__ << " Majortype: " << ToString(outMediaType->majortype); 
-    LOG(logDEBUG) << __FUNCTIONW__ << " Subtype: " << ToString(outMediaType->subtype); 
+    LOG(logDEBUG) << __FUNCTION__ << " Majortype: " << ToString(outMediaType->majortype); 
+    LOG(logDEBUG) << __FUNCTION__ << " Subtype: " << ToString(outMediaType->subtype); 
 
     return S_OK;
 }
@@ -97,7 +97,7 @@ HRESULT OggDemuxInputPin::CompleteConnect(IPin* pPeer)
         hr = m_filter->SetUpPins();
     }
 
-    LOG(logDEBUG) << __FUNCTIONW__ << " result: 0x" << std::hex << hr;
+    LOG(logDEBUG) << __FUNCTION__ << " result: 0x" << std::hex << hr;
 
     return hr;
 }
@@ -110,10 +110,16 @@ HRESULT OggDemuxInputPin::CheckConnect(IPin* pPin)
     HRESULT hr = CBasePin::CheckConnect(pPin);
 
     // Verify "OggS" magic bytes
-    CComQIPtr<IAsyncReader> reader = pPin;
+    IAsyncReader *reader;
+    reader = NULL;
+    IPin *pin = pPin;
+    if (pin)
+    {
+        pin->QueryInterface(IID_IAsyncReader, (void**) &reader);
+    }
     if (!reader)
     {
-        LOG(logERROR) << __FUNCTIONW__ << " No IAsyncReader interface found";
+        LOG(logERROR) << __FUNCTION__ << " No IAsyncReader interface found";
         hr = VFW_E_NO_TRANSPORT;
     }
 
@@ -130,7 +136,7 @@ HRESULT OggDemuxInputPin::CheckConnect(IPin* pPin)
             magic[2] != 'g' ||
             magic[3] != 'S')
         {
-            LOG(logERROR) << __FUNCTIONW__ << " Magic is different than 'OggS': " << 
+            LOG(logERROR) << __FUNCTION__ << " Magic is different than 'OggS': " << 
                 magic[0] << ", " << magic[1] << ", " << magic[2] << ", " << magic[3];
 
             hr = VFW_E_UNSUPPORTED_STREAM;
@@ -138,7 +144,7 @@ HRESULT OggDemuxInputPin::CheckConnect(IPin* pPin)
     }
     else
     {
-        LOG(logERROR) << __FUNCTIONW__ << " SyncRead failed. Error: 0x" << hex << hr;
+        LOG(logERROR) << __FUNCTION__ << " SyncRead failed. Error: 0x" << hex << hr;
     }
 
     return hr;
@@ -153,7 +159,13 @@ HRESULT OggDemuxInputPin::Read(LONGLONG llOffset, long cBytes, BYTE* pBuffer)
 {
     HRESULT hr = E_NOINTERFACE;
     
-    CComQIPtr<IAsyncReader> reader = GetConnected();
+    IAsyncReader *reader;
+    reader = NULL;
+    IPin *pin = GetConnected();
+    if (pin)
+    {
+        pin->QueryInterface(IID_IAsyncReader, (void**) &reader);
+    }
     if (reader)
     {
         hr = reader->SyncRead(llOffset, cBytes, pBuffer);
@@ -166,7 +178,13 @@ LONGLONG OggDemuxInputPin::Length()
     LONGLONG llTotal = 0;
     LONGLONG llAvail;
     
-    CComQIPtr<IAsyncReader> reader = GetConnected();
+    IAsyncReader *reader;
+    reader = NULL;
+    IPin *pin = GetConnected();
+    if (pin)
+    {
+        pin->QueryInterface(IID_IAsyncReader, (void**) &reader);
+    }
     if (reader)
     {
         HRESULT hr = reader->Length(&llTotal, &llAvail);
@@ -175,7 +193,16 @@ LONGLONG OggDemuxInputPin::Length()
     return llTotal;
 }
 
-CComQIPtr<IAsyncReader> OggDemuxInputPin::GetReader()
+IAsyncReader *OggDemuxInputPin::GetReader()
 {
-    return GetConnected();
+    IAsyncReader *tmp;
+    IPin *pin = GetConnected();
+    if (pin)
+    {
+        if (SUCCEEDED(pin->QueryInterface(IID_IAsyncReader, (void**) &tmp)))
+        {
+            return tmp;
+        }
+    }
+    return NULL;
 }

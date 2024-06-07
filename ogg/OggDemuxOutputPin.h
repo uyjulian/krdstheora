@@ -61,7 +61,7 @@ public:
 	static const unsigned long NUM_PAGE_BUFFERS = 100;
 
 	unsigned long getSerialNo();
-	CComPtr<IOggDecoder> getDecoderInterface();
+	IOggDecoder *getDecoderInterface();
 	bool IsStreamReady();
 	void SetIsStreamReady(bool inIsStreamReady);
 
@@ -107,7 +107,7 @@ private:
 	unsigned long m_numBuffers;
 	
 	OggPacket* m_identHeader;
-	CComPtr<IOggDecoder> m_decoderInterface;
+	IOggDecoderPtr m_decoderInterface;
 	OggPacketiser m_packetiser;
 
 	COutputQueue* m_dataQueue;

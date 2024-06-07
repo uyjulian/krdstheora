@@ -32,19 +32,19 @@
 #ifndef XMLSETTINGS_H
 #define XMLSETTINGS_H
 
-#include <MsXml.h>
+#include <msxml.h>
 #include <string>
 
 class XmlSettings
 {
-    CComPtr<IXMLDOMDocument> m_xmlDoc;
+    IXMLDOMDocumentPtr m_xmlDoc;
     std::wstring m_moduleName;
 
 public:
 
     XmlSettings()
     {
-        m_xmlDoc.CoCreateInstance(CLSID_DOMDocument);
+        m_xmlDoc.CreateInstance(CLSID_DOMDocument, NULL, CLSCTX_ALL);
     }
 
     virtual ~XmlSettings()
@@ -64,7 +64,7 @@ public:
         }
 
         VARIANT_BOOL isSuccessful = VARIANT_FALSE;
-        HRESULT hr = m_xmlDoc->load(CComVariant(xmlFileName.c_str()), &isSuccessful);
+        HRESULT hr = m_xmlDoc->load(_variant_t(xmlFileName.c_str()), &isSuccessful);
 
         return SUCCEEDED(hr) && isSuccessful == VARIANT_TRUE;
     }
@@ -76,14 +76,14 @@ public:
         std::wstringstream queryString;
         queryString << L"/Configuration/Module[@Name=\"" << m_moduleName << L"\"]/" << keyName;
 
-        CComPtr<IXMLDOMNode> node;
-        HRESULT hr = m_xmlDoc->selectSingleNode(CComBSTR(queryString.str().c_str()), &node);
+        IXMLDOMNodePtr node;
+        HRESULT hr = m_xmlDoc->selectSingleNode(_bstr_t(queryString.str().c_str()), &node);
         if (FAILED(hr) || !node)
         {
             return result;
         }
 
-        CComPtr<IXMLDOMNamedNodeMap> attributesMap;
+        IXMLDOMNamedNodeMapPtr attributesMap;
         hr = node->get_attributes(&attributesMap);
 
         if (FAILED(hr))
@@ -91,15 +91,15 @@ public:
             return result;
         }
 
-        CComPtr<IXMLDOMNode> levelAttribute;
-        hr = attributesMap->getNamedItem(CComBSTR(attributeName.c_str()), &levelAttribute);
+        IXMLDOMNodePtr levelAttribute;
+        hr = attributesMap->getNamedItem(_bstr_t(attributeName.c_str()), &levelAttribute);
 
         if (FAILED(hr))
         {
             return result;
         }
 
-        CComVariant levelValue;
+        _variant_t levelValue;
         hr = levelAttribute->get_nodeValue(&levelValue);
 
         if (FAILED(hr))
@@ -107,7 +107,7 @@ public:
             return result;
         }
 
-        result = static_cast<wchar_t*>(CComBSTR(levelValue.bstrVal));
+        result = static_cast<wchar_t*>(_bstr_t(levelValue.bstrVal));
         return result;
     }
 };

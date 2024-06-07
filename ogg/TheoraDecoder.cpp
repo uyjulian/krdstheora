@@ -30,8 +30,8 @@
 //===========================================================================
 
 #include "oggstdafx.h"
-#include "theoradecoder.h"
-#include "ogglog.h"
+#include "TheoraDecoder.h"
+#include "oggLog.h"
 
 TheoraDecoder::TheoraDecoder()
 	: mFirstPacket(true)
@@ -62,7 +62,7 @@ bool TheoraDecoder::initCodec()
 yuv_buffer* TheoraDecoder::decodeTheora(StampedOggPacket* inPacket) 
 {		
     //Accepts packet and deletes it.
-    LOG(logDEBUG3) << __FUNCTIONW__;
+    LOG(logDEBUG3) << __FUNCTION__;
 
 	if (mPacketCount < 3) 
     {
@@ -74,7 +74,7 @@ yuv_buffer* TheoraDecoder::decodeTheora(StampedOggPacket* inPacket)
 			//TODO::: Post processing http://people.xiph.org/~tterribe/doc/libtheora-exp/theoradec_8h.html#a1
 		}
 		
-        LOG(logDEBUG3) << __FUNCTIONW__ << " PacketCount under 3: " << mPacketCount;
+        LOG(logDEBUG3) << __FUNCTION__ << " PacketCount under 3: " << mPacketCount;
 		return NULL;
 	} 
     else 
@@ -89,7 +89,7 @@ yuv_buffer* TheoraDecoder::decodeTheora(StampedOggPacket* inPacket)
 			//Ignore header packets
 			delete inPacket;
 
-            LOG(logDEBUG3) << __FUNCTIONW__ << " Ignoring header packets";
+            LOG(logDEBUG3) << __FUNCTION__ << " Ignoring header packets";
 			return NULL;
 		}
 

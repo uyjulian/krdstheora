@@ -32,7 +32,7 @@
 
 #include "oggstdafx.h"
 #include "OggTypes.h"
-#include "theoradecodeinputpin.h"
+#include "TheoraDecodeInputPin.h"
 
 
 TheoraDecodeInputPin::TheoraDecodeInputPin(CTransformFilter* inParentFilter, HRESULT* outHR) 
@@ -66,7 +66,7 @@ HRESULT TheoraDecodeInputPin::GetAllocatorRequirements(ALLOCATOR_PROPERTIES *out
 	TheoraDecodeFilter* locParent = (TheoraDecodeFilter*)m_pFilter;
 	unsigned long locBuffSize = (locParent->m_theoraFormatInfo->outerFrameHeight * locParent->m_theoraFormatInfo->outerFrameWidth * 3) >> 2;
 
-    LOG(logDEBUG) << __FUNCTIONW__ << " Buffer Size: " << locBuffSize;
+    LOG(logDEBUG) << __FUNCTION__ << " Buffer Size: " << locBuffSize;
 
 #ifdef WINCE
 	if (locBuffSize < 4096) 
@@ -124,7 +124,7 @@ HRESULT TheoraDecodeInputPin::CompleteConnect (IPin *inReceivePin)
 	}
 	SetDelegate(locSeeker);
 	locHR = CTransformInputPin::CompleteConnect(inReceivePin);
-    LOG(logDEBUG) << __FUNCTIONW__ <<  " returned: " << locHR;
+    LOG(logDEBUG) << __FUNCTION__ <<  " returned: " << locHR;
 
 	return locHR;
 }

@@ -138,7 +138,7 @@ STDMETHODIMP VorbisDecodeInputPin::Receive(IMediaSample* inSample)
 
     if (hr != S_OK) 
     {
-        LOG(logERROR) << __FUNCTIONW__ << " inSample->GetPointer failed, error code: 0x" << std::hex << hr;
+        LOG(logERROR) << __FUNCTION__ << " inSample->GetPointer failed, error code: 0x" << std::hex << hr;
         return hr;
     } 
 
@@ -223,7 +223,7 @@ STDMETHODIMP VorbisDecodeInputPin::Receive(IMediaSample* inSample)
                     return hr;
                 }
 
-                LOG(logDEBUG4) << __FUNCTIONW__ << " Sample Size: " << sample->GetSize();
+                LOG(logDEBUG4) << __FUNCTION__ << " Sample Size: " << sample->GetSize();
                 bytesToCopy = sample->GetSize();
 
                 if (mDecodedByteCount - bytesCopied < (unsigned long)sample->GetSize()) 
@@ -231,7 +231,7 @@ STDMETHODIMP VorbisDecodeInputPin::Receive(IMediaSample* inSample)
                     bytesToCopy = mDecodedByteCount - bytesCopied;
                 }
 
-                LOG(logDEBUG4) << __FUNCTIONW__ << " Bytes to copy: " << bytesToCopy;
+                LOG(logDEBUG4) << __FUNCTION__ << " Bytes to copy: " << bytesToCopy;
 
                 sampleDuration = (((bytesToCopy/mFrameSize) * UNITS) / mSampleRate);
                 tStop = tStart + sampleDuration;
@@ -259,7 +259,7 @@ STDMETHODIMP VorbisDecodeInputPin::Receive(IMediaSample* inSample)
                         adjustedStart += strippedDuration;
                     }                    
 
-                    LOG(logDEBUG4) << __FUNCTIONW__ << " Seek strip offset: " << seekStripOffset;
+                    LOG(logDEBUG4) << __FUNCTION__ << " Seek strip offset: " << seekStripOffset;
 
                     if (bytesToCopy - seekStripOffset < 0)
                     {
@@ -287,7 +287,7 @@ STDMETHODIMP VorbisDecodeInputPin::Receive(IMediaSample* inSample)
 
             } while(bytesCopied < mDecodedByteCount);
 
-            LOG(logDEBUG4) << __FUNCTIONW__ << " Decoded byte count: " << mDecodedByteCount;
+            LOG(logDEBUG4) << __FUNCTION__ << " Decoded byte count: " << mDecodedByteCount;
 
             mDecodedByteCount = 0;
 
@@ -448,7 +448,7 @@ VorbisDecodeFilter* VorbisDecodeInputPin::GetFilter()
 
 HRESULT VorbisDecodeInputPin::SetMediaType(const CMediaType* inMediaType) 
 {
-    LOG(logDEBUG) << __FUNCTIONW__;
+    LOG(logDEBUG) << __FUNCTION__;
 
     //FIX:::Error checking
     if (CheckMediaType(inMediaType) == S_OK) 
@@ -457,21 +457,21 @@ HRESULT VorbisDecodeInputPin::SetMediaType(const CMediaType* inMediaType)
             inMediaType->formattype == FORMAT_OggIdentHeader &&
             inMediaType->cbFormat == VORBIS_IDENT_HEADER_SIZE) 
         {
-            LOG(logINFO) << __FUNCTIONW__ << " MEDIATYPE_OggPacketStream, FORMAT_OggIdentHeader";
+            LOG(logINFO) << __FUNCTION__ << " MEDIATYPE_OggPacketStream, FORMAT_OggIdentHeader";
             GetFilter()->setVorbisFormat(inMediaType->pbFormat);
         }
         else if (inMediaType->majortype == MEDIATYPE_Audio &&
                  inMediaType->subtype == MEDIASUBTYPE_Vorbis &&
                  inMediaType->formattype == FORMAT_Vorbis)
         {
-            LOG(logINFO) << __FUNCTIONW__ << " MEDIATYPE_Audio, MEDIASUBTYPE_Vorbis";
+            LOG(logINFO) << __FUNCTION__ << " MEDIATYPE_Audio, MEDIASUBTYPE_Vorbis";
             GetFilter()->setVorbisFormat(reinterpret_cast<VORBISFORMAT*>(inMediaType->pbFormat));
         }
         else if (inMediaType->majortype == MEDIATYPE_Audio &&
             inMediaType->subtype == MEDIASUBTYPE_Vorbis2 &&
             inMediaType->formattype == FORMAT_Vorbis2)
         {
-            LOG(logINFO) << __FUNCTIONW__ << " MEDIATYPE_Audio, MEDIASUBTYPE_Vorbis2";
+            LOG(logINFO) << __FUNCTION__ << " MEDIATYPE_Audio, MEDIASUBTYPE_Vorbis2";
 
             m_isVorbisFormat2 = true;
             GetFilter()->setVorbisFormat(reinterpret_cast<VORBISFORMAT2*>(inMediaType->pbFormat));
@@ -481,7 +481,7 @@ HRESULT VorbisDecodeInputPin::SetMediaType(const CMediaType* inMediaType)
     } 
     else 
     {
-        LOG(logERROR) << __FUNCTIONW__ << " MediaType not OK, Exiting";
+        LOG(logERROR) << __FUNCTION__ << " MediaType not OK, Exiting";
         throw 0;
     }
     
@@ -514,13 +514,13 @@ HRESULT VorbisDecodeInputPin::CheckMediaType(const CMediaType *inMediaType)
         return S_OK;
     }
 
-    LOG(logDEBUG) << __FUNCTIONW__ << " Input type not OK.";
+    LOG(logDEBUG) << __FUNCTION__ << " Input type not OK.";
     if (inMediaType->cbFormat > 7)
     {
         char format[8] = {};
         //strncpy(format, reinterpret_cast<const char*>(inMediaType->pbFormat), 7);
 		strncpy_s(format, 8, reinterpret_cast<const char*>(inMediaType->pbFormat), 7);
-        LOG(logDEBUG) << __FUNCTIONW__ << " cbFormat start: " << format;
+        LOG(logDEBUG) << __FUNCTION__ << " cbFormat start: " << format;
     }
 
     return S_FALSE;
@@ -556,7 +556,7 @@ LOOG_INT64 VorbisDecodeInputPin::mustSeekBefore(LOOG_INT64 inGranule)
 }
 IOggDecoder::eAcceptHeaderResult VorbisDecodeInputPin::showHeaderPacket(OggPacket* inCodecHeaderPacket)
 {
-    LOG(logDEBUG) << __FUNCTIONW__ << " SetupState: " << mSetupState;
+    LOG(logDEBUG) << __FUNCTION__ << " SetupState: " << mSetupState;
     unsigned long locDummy;
     switch (mSetupState) 
     {
@@ -648,7 +648,7 @@ HRESULT VorbisDecodeInputPin::CompleteConnect(IPin *inReceivePin)
     {
         mOggOutputPinInterface = NULL;
     }
-    LOG(logDEBUG) << __FUNCTIONW__ << " QueryInterface(IOggOutputPin) " << std::boolalpha 
+    LOG(logDEBUG) << __FUNCTION__ << " QueryInterface(IOggOutputPin) " << std::boolalpha 
         << (mOggOutputPinInterface != NULL ? "succeeded" : "failed");
 
     if (GetFilter()->getVorbisFormatBlock())

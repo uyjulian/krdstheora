@@ -87,8 +87,8 @@ protected:
 	bool mIsContinuation;
 
 	//TODO::Should these be here ?
-	string OggPacket::dumpNCharsToString(unsigned char* inStartPoint, unsigned long inNumChars) ;
-	string OggPacket::padField(string inString, unsigned long inPadWidth, unsigned char inPadChar);
+	string dumpNCharsToString(unsigned char* inStartPoint, unsigned long inNumChars) ;
+	string padField(string inString, unsigned long inPadWidth, unsigned char inPadChar);
 
 private:
 	OggPacket& operator=(const OggPacket& other);  /* Don't assign me */

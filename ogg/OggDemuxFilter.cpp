@@ -198,7 +198,7 @@ STDMETHODIMP OggDemuxFilter::Run(REFERENCE_TIME tStart)
 STDMETHODIMP OggDemuxFilter::Pause() 
 {
 	CAutoLock locLock(m_pLock);
-    LOG(logDEBUG) << __FUNCTIONW__;
+    LOG(logDEBUG) << __FUNCTION__;
 
 	if (m_State == State_Stopped) 
     {
@@ -216,7 +216,7 @@ STDMETHODIMP OggDemuxFilter::Pause()
 
 	HRESULT hr = CBaseFilter::Pause();
 
-    LOG(logDEBUG) << __FUNCTIONW__ << L"Base class returned: 0x" << std::hex << hr;
+    LOG(logDEBUG) << __FUNCTION__ << L"Base class returned: 0x" << std::hex << hr;
 	
 	return hr;	
 }
@@ -224,7 +224,7 @@ STDMETHODIMP OggDemuxFilter::Pause()
 STDMETHODIMP OggDemuxFilter::Stop() 
 {
 	CAutoLock locLock(m_pLock);
-    LOG(logDEBUG) << __FUNCTIONW__;
+    LOG(logDEBUG) << __FUNCTION__;
 
 	CallWorker(THREAD_EXIT);
 	Close();
@@ -238,7 +238,7 @@ STDMETHODIMP OggDemuxFilter::Stop()
 void OggDemuxFilter::DeliverBeginFlush() 
 {
 	CAutoLock locLock(m_pLock);
-    LOG(logDEBUG) << __FUNCTIONW__;
+    LOG(logDEBUG) << __FUNCTION__;
 	
 	for (unsigned long i = 0; i < m_streamMapper->numPins(); i++) 
     {
@@ -252,7 +252,7 @@ void OggDemuxFilter::DeliverBeginFlush()
 void OggDemuxFilter::DeliverEndFlush() 
 {
 	CAutoLock locLock(m_pLock);
-    LOG(logDEBUG) << __FUNCTIONW__;
+    LOG(logDEBUG) << __FUNCTION__;
 
 	for (unsigned long i = 0; i < m_streamMapper->numPins(); i++) 
     {
@@ -265,7 +265,7 @@ void OggDemuxFilter::DeliverEOS()
 {
 	//m_streamMapper->toStartOfData();
     CAutoLock locStreamLock(&m_streamLock);
-    LOG(logDEBUG) << __FUNCTIONW__;
+    LOG(logDEBUG) << __FUNCTION__;
 	
     for (unsigned long i = 0; i < m_streamMapper->numPins(); i++) 
     {
@@ -279,7 +279,7 @@ void OggDemuxFilter::DeliverEOS()
 void OggDemuxFilter::DeliverNewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, double dRate) 
 {
     CAutoLock locStreamLock(&m_streamLock);
-	LOG(logDEBUG) << __FUNCTIONW__;
+	LOG(logDEBUG) << __FUNCTION__;
 	
     for (unsigned long i = 0; i < m_streamMapper->numPins(); i++) 
     {
@@ -290,7 +290,7 @@ void OggDemuxFilter::DeliverNewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tSt
 void OggDemuxFilter::resetStream() 
 {
 	CAutoLock locDemuxLock(&m_demuxLock);
-    LOG(logDEBUG) << __FUNCTIONW__;
+    LOG(logDEBUG) << __FUNCTION__;
 
 	m_oggBuffer.clearData();
 	
@@ -309,7 +309,7 @@ bool OggDemuxFilter::acceptOggPage(OggPage* inOggPage)
 		} 
         else 
         {
-            LOG(logDEBUG) << __FUNCTIONW__ << " Found BOS\r\n" << inOggPage->header()->toString().c_str();
+            LOG(logDEBUG) << __FUNCTION__ << " Found BOS\r\n" << inOggPage->header()->toString().c_str();
 			return m_streamMapper->acceptOggPage(inOggPage);
 		}
 	} 
@@ -334,7 +334,7 @@ HRESULT OggDemuxFilter::SetUpPins()
 {
 	CAutoLock locDemuxLock(&m_demuxLock);
 	
-	LOG(logDEBUG) << __FUNCTIONW__;
+	LOG(logDEBUG) << __FUNCTION__;
 	
 	//Register a callback
 	m_oggBuffer.registerVirtualCallback(this);
@@ -343,7 +343,7 @@ HRESULT OggDemuxFilter::SetUpPins()
     LONGLONG position = 0;
     HRESULT hr = S_OK;
 
-    CComPtr<IAsyncReader> reader = m_inputPin.GetReader();
+    IAsyncReaderPtr reader = m_inputPin.GetReader();
 
     //Feed the data in until we have seen all BOS pages.
     while (SUCCEEDED(hr) && !m_seenPositiveGranulePos) 
@@ -357,7 +357,7 @@ HRESULT OggDemuxFilter::SetUpPins()
         else if (!(hr == S_FALSE && m_seenPositiveGranulePos)) 
         {
             //This prevents us dying on small files, if we hit eof but we also saw a +'ve gran pos, this file is ok.
-            LOG(logERROR) << __FUNCTIONW__ << " Bailing out";
+            LOG(logERROR) << __FUNCTION__ << " Bailing out";
             hr = VFW_E_CANNOT_RENDER;
         }
     }
@@ -430,14 +430,14 @@ DWORD OggDemuxFilter::ThreadProc()
 			case THREAD_EXIT:
 	
 				Reply(S_OK);
-                LOG(logDEBUG) << __FUNCTIONW__ << " THREAD IS EXITING";
+                LOG(logDEBUG) << __FUNCTION__ << " THREAD IS EXITING";
 				return S_OK;
 
 			case THREAD_RUN:
 	
 				Reply(S_OK);
 				DataProcessLoop();
-                LOG(logDEBUG) << __FUNCTIONW__ << " Data Process Loop has returned";
+                LOG(logDEBUG) << __FUNCTION__ << " Data Process Loop has returned";
 				break;
 
            case THREAD_SEEK:
@@ -447,7 +447,7 @@ DWORD OggDemuxFilter::ThreadProc()
                Reply(S_OK);
 
                DataProcessLoop();
-               LOG(logDEBUG) << __FUNCTIONW__ << " Seek request";
+               LOG(logDEBUG) << __FUNCTION__ << " Seek request";
                break;
 		}
 	}
@@ -457,7 +457,7 @@ DWORD OggDemuxFilter::ThreadProc()
 
 void OggDemuxFilter::notifyPinConnected()
 {
-    LOG(logDEBUG) << __FUNCTIONW__;
+    LOG(logDEBUG) << __FUNCTION__;
 
     if (!m_streamMapper->allStreamsReady()) 
     {
@@ -481,12 +481,12 @@ void OggDemuxFilter::notifyPinConnected()
     }
 
 #ifndef WINCE
-    LOG(logDEBUG) << __FUNCTIONW__ << L" Building seek table...";
+    LOG(logDEBUG) << __FUNCTION__ << L" Building seek table...";
 
-    CComPtr<IAsyncReader> reader = m_inputPin.GetReader();
+    IAsyncReaderPtr reader = m_inputPin.GetReader();
     static_cast<CustomOggChainGranuleSeekTable*>(m_seekTable)->buildTable(reader);
 
-    LOG(logDEBUG) << __FUNCTIONW__ << L" Built.";
+    LOG(logDEBUG) << __FUNCTION__ << L" Built.";
 #endif
 }
 
@@ -506,7 +506,7 @@ HRESULT OggDemuxFilter::DataProcessLoop()
     {
 		if (CheckRequest(&threadCommand) == TRUE) 
         {
-		    LOG(logDEBUG) << __FUNCTIONW__ << " ThreadProc command encountered (" << threadCommand << ") Exiting.";
+		    LOG(logDEBUG) << __FUNCTION__ << " ThreadProc command encountered (" << threadCommand << ") Exiting.";
 		    return S_OK;
 		}
 
@@ -530,12 +530,12 @@ HRESULT OggDemuxFilter::DataProcessLoop()
             //To avoid blocking problems... restart the loop if it was just reset while waiting for lock.
 			if (m_justReset) 
             {		
-                LOG(logDEBUG) << __FUNCTIONW__ << " Detected JustRest condition";
+                LOG(logDEBUG) << __FUNCTION__ << " Detected JustRest condition";
 				continue;
 			}
 			feedResult = m_oggBuffer.feed(buffer.get(), bytesRead);
 
-            LOG(logDEBUG) << __FUNCTIONW__ << " Feed result = " << feedResult 
+            LOG(logDEBUG) << __FUNCTION__ << " Feed result = " << feedResult 
                 << " BytesRead: " << bytesRead << " CurrentReadPos: " << GetCurrentReaderPos();
 
             if (!(feedResult == OggDataBuffer::FEED_OK || 
@@ -546,7 +546,7 @@ HRESULT OggDemuxFilter::DataProcessLoop()
 		}
 		catch (int)
 		{
-            LOG(logDEBUG) << __FUNCTIONW__ << " Caught an exception.";
+            LOG(logDEBUG) << __FUNCTION__ << " Caught an exception.";
 
 			isEOF = true;
 			continueLooping = false;
@@ -556,12 +556,12 @@ HRESULT OggDemuxFilter::DataProcessLoop()
         {
 			//debugLog << "DataProcessLoop : EOF"<<endl;
             CAutoLock locStreamLock(&m_streamLock);
-			LOG(logDEBUG) << __FUNCTIONW__ << " EOF Deliver EOS";
+			LOG(logDEBUG) << __FUNCTION__ << " EOF Deliver EOS";
 			DeliverEOS();
 		}
 	}
 
-	LOG(logDEBUG) << __FUNCTIONW__ << " Exiting.";
+	LOG(logDEBUG) << __FUNCTION__ << " Exiting.";
 
     return S_OK;
 }
@@ -848,13 +848,13 @@ unsigned __stdcall OggDemuxFilter::SeekTableThread(void* arg)
 
 void OggDemuxFilter::BuildSeekTable()
 {
-    LOG(logDEBUG) << __FUNCTIONW__ << L" Building seek table...";
+    LOG(logDEBUG) << __FUNCTION__ << L" Building seek table...";
 
-    CComPtr<IAsyncReader> reader = m_inputPin.GetReader();
+    IAsyncReaderPtr reader = m_inputPin.GetReader();
     if (reader)
     {
         static_cast<CustomOggChainGranuleSeekTable*>(m_seekTable)->buildTable(reader);
     }
 
-    LOG(logDEBUG) << __FUNCTIONW__ << L" Built.";    
+    LOG(logDEBUG) << __FUNCTION__ << L" Built.";    
 }

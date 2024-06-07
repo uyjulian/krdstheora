@@ -1,5 +1,5 @@
 #include "oggstdafx.h"
-#include "autooggchaingranuleseektable.h"
+#include "AutoOggChainGranuleSeekTable.h"
 #include <limits>
 #undef max
 

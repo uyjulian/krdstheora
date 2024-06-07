@@ -33,7 +33,7 @@
 #include "ds_guids.h"
 #include "OggDemuxFilter.h"
 #include "OggDemuxOutputPin.h"
-#include "ogglog.h"
+#include "oggLog.h"
 
 OggDemuxOutputPin::	OggDemuxOutputPin(TCHAR* inObjectName, OggDemuxFilter* inParentFilter, CCritSec* inFilterLock,	
                                       OggPacket* inIdentHeader,	unsigned long inSerialNo):	
@@ -117,7 +117,7 @@ unsigned long OggDemuxOutputPin::getSerialNo()
 	return m_serialNo;//mBOSPage->header()->StreamSerialNo();
 }
 
-CComPtr<IOggDecoder> OggDemuxOutputPin::getDecoderInterface()
+IOggDecoder *OggDemuxOutputPin::getDecoderInterface()
 {
     if (!m_decoderInterface) 
     {
@@ -185,7 +185,7 @@ HRESULT OggDemuxOutputPin::DecideBufferSize(IMemAllocator* inoutAllocator, ALLOC
 	m_numBuffers = locActualAlloc.cBuffers;
 	hr = inoutAllocator->Commit();
 
-    LOG(logINFO) << __FUNCTIONW__ << " BufferSize: " << locActualAlloc.cbBuffer << ", Buffers: " << locActualAlloc.cBuffers;
+    LOG(logINFO) << __FUNCTION__ << " BufferSize: " << locActualAlloc.cbBuffer << ", Buffers: " << locActualAlloc.cBuffers;
 
 	return hr;
 }
@@ -200,7 +200,7 @@ HRESULT OggDemuxOutputPin::BreakConnect()
 
 HRESULT OggDemuxOutputPin::CompleteConnect(IPin *inReceivePin)
 {
-    CComPtr<IOggDecoder> decoder;
+    IOggDecoderPtr decoder;
     inReceivePin->QueryInterface(IID_IOggDecoder, (void**)&decoder);
 	if (decoder != NULL) 
     {
@@ -287,7 +287,7 @@ bool OggDemuxOutputPin::dispatchPacket(StampedOggPacket* inPacket)
 
 		if (locHR != S_OK) 
         {
-            LOG(logERROR) << __FUNCTIONW__ << " Failure... Queue rejected sample, error: 0x" << std::hex << locHR;
+            LOG(logERROR) << __FUNCTION__ << " Failure... Queue rejected sample, error: 0x" << std::hex << locHR;
 			//Stopping ??
 
 			//delete inPacket;
@@ -301,7 +301,7 @@ bool OggDemuxOutputPin::dispatchPacket(StampedOggPacket* inPacket)
 	} 
     else 
     {
-		LOG(logERROR) << __FUNCTIONW__ << " Buffer to small. " << locSample->GetSize() << " vs " << inPacket->packetSize();
+		LOG(logERROR) << __FUNCTION__ << " Buffer to small. " << locSample->GetSize() << " vs " << inPacket->packetSize();
 		throw 0;
 	}	
 }

@@ -32,7 +32,7 @@
 
 #include "oggstdafx.h"
 #undef INITGUID
-#include "Vorbisdecodeoutputpin.h"
+#include "VorbisDecodeOutputPin.h"
 #include "VorbisTypes.h"
 
 VorbisDecodeOutputPin::VorbisDecodeOutputPin(VorbisDecodeFilter* inParentFilter, CCritSec* inFilterLock, 

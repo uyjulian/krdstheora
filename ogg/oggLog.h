@@ -43,7 +43,7 @@
 #include <cstdio>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <MMSystem.h>
+#include <mmsystem.h>
 
 inline std::wstring NowTime();
 
