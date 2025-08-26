@@ -33,8 +33,8 @@
 #pragma once
 
 #include "TheoraTypes.h"
-#include "TheoraDecodeOutputPin.h"
-#include "TheoraDecodeInputPin.h"
+#include "theoradecodeoutputpin.h"
+#include "theoradecodeinputpin.h"
 
 #include <iBE_Math.h>
 #include "TheoraDecoder.h"
@@ -72,7 +72,7 @@ public:
 	virtual HRESULT SetMediaType(PIN_DIRECTION inDirection, const CMediaType* inMediaType);
 	virtual HRESULT NewSegment(REFERENCE_TIME inStart, REFERENCE_TIME inEnd, double inRate);
 	//virtual BOOL ShouldSkipFrame(IMediaSample* inSample);
-	virtual CBasePin* GetPin(int inPinNo);
+	virtual CBasePin* TheoraDecodeFilter::GetPin(int inPinNo);
 	
 
     HRESULT __stdcall Stop();

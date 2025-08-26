@@ -31,7 +31,7 @@
 
 #include "oggstdafx.h"
 #include <OggDataBuffer.h>
-#include "oggLog.h"
+#include "ogglog.h"
 #undef min
 
 //LEAK CHECKED - 2004/10/17		-	OK.
@@ -218,7 +218,7 @@ OggDataBuffer::eProcessResult OggDataBuffer::processBaseHeader()
 		//Make a local buffer for the header
 		unsigned char* locBuff = new unsigned char[OggPageHeader::OGG_BASE_HEADER_SIZE];		//deleted before this function returns
 		// 配列なので、auto_ptr使わない方がいいが、組み込み方なので気にしないことにする
-		std::auto_ptr<unsigned char> lb(locBuff);
+		auto_ptr<unsigned char> lb(locBuff);
 		
 		// LOG(logDEBUG1) << "ProcessBaseHeader : Reading from stream...";
 		
@@ -514,7 +514,7 @@ OggDataBuffer::eProcessResult OggDataBuffer::processBuffer()
 			default:
 				//TODO::: What are we supposed to do with this. Anything need cleaning up ?
 				
-				LOG(logDEBUG1) << __FUNCTION__ << " Ogg Buffer Error";
+				LOG(logDEBUG1) << __FUNCTIONW__ << " Ogg Buffer Error";
 				return PROCESS_UNKNOWN_INTERNAL_ERROR;
 				break;
 		}

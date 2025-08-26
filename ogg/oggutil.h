@@ -46,7 +46,7 @@
     } while (false);
 
 #include <shlobj.h>
-#include "xmlsettings.h"
+#include "XmlSettings.h"
 
 namespace util
 {

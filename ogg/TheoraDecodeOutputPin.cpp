@@ -30,7 +30,7 @@
 //===========================================================================
 
 #include "oggstdafx.h"
-#include "TheoraDecodeOutputPin.h"
+#include "TheoraDecodeOutputpin.h"
 #include "TheoraDecodeFilter.h"
 
 TheoraDecodeOutputPin::TheoraDecodeOutputPin(TheoraDecodeFilter* inParentFilter, HRESULT* outHR) :	
@@ -63,7 +63,7 @@ HRESULT TheoraDecodeOutputPin::BreakConnect()
 	CAutoLock locLock(m_pLock);
 	//Need a lock ??
 	ReleaseDelegate();
-	LOG(logDEBUG) << __FUNCTION__;
+	LOG(logDEBUG) << __FUNCTIONW__;
 	
     return CTransformOutputPin::BreakConnect();
 }
@@ -71,7 +71,7 @@ HRESULT TheoraDecodeOutputPin::BreakConnect()
 HRESULT TheoraDecodeOutputPin::CompleteConnect (IPin *inReceivePin) 
 {
 	CAutoLock locLock(m_pLock);
-	LOG(logDEBUG) << __FUNCTION__;
+	LOG(logDEBUG) << __FUNCTIONW__;
 
 	IMediaSeeking* locSeeker = NULL;
 
@@ -79,7 +79,7 @@ HRESULT TheoraDecodeOutputPin::CompleteConnect (IPin *inReceivePin)
 
 	if (locSeeker == NULL) 
     {
-		LOG(logDEBUG) << __FUNCTION__ << "Seeker was NULL";
+		LOG(logDEBUG) << __FUNCTIONW__ << "Seeker was NULL";
 	}
 
 	SetDelegate(locSeeker);

@@ -54,7 +54,7 @@ public:
     HRESULT Read(LONGLONG llOffset, long cBytes, BYTE* pBuffer);
     LONGLONG Length();
 
-    IAsyncReader *GetReader();
+    CComQIPtr<IAsyncReader> GetReader();
 
 private:
     OggDemuxFilter* m_filter;

@@ -311,10 +311,10 @@ bool TheoraDecodeFilter::FillVideoInfoHeader2(int inPosition, VIDEOINFOHEADER2* 
 
 HRESULT TheoraDecodeFilter::CheckInputType(const CMediaType* inMediaType) 
 {
-    LOG(logDEBUG) << __FUNCTION__ << "\tMajortype: " << inMediaType->majortype;
-    LOG(logDEBUG) << __FUNCTION__ << "\tSubtype: " << inMediaType->subtype;
-    LOG(logDEBUG) << __FUNCTION__ << "\tFormattype: " << inMediaType->formattype;
-    LOG(logDEBUG) << __FUNCTION__ << "\tcbFormat: " << inMediaType->cbFormat;
+    LOG(logDEBUG) << __FUNCTIONW__ << "\tMajortype: " << inMediaType->majortype;
+    LOG(logDEBUG) << __FUNCTIONW__ << "\tSubtype: " << inMediaType->subtype;
+    LOG(logDEBUG) << __FUNCTIONW__ << "\tFormattype: " << inMediaType->formattype;
+    LOG(logDEBUG) << __FUNCTIONW__ << "\tcbFormat: " << inMediaType->cbFormat;
 
 	if	( inMediaType->majortype == MEDIATYPE_OggPacketStream &&
 		  inMediaType->subtype == MEDIASUBTYPE_None && 
@@ -325,7 +325,7 @@ HRESULT TheoraDecodeFilter::CheckInputType(const CMediaType* inMediaType)
 			if (strncmp((char*)inMediaType->pbFormat, "\200theora", 7) == 0) 
             {
 				//TODO::: Possibly verify version
-				LOG(logDEBUG) << __FUNCTION__ << " Input type ok";
+				LOG(logDEBUG) << __FUNCTIONW__ << " Input type ok";
 				return S_OK;
 			}
 		}
@@ -335,17 +335,17 @@ HRESULT TheoraDecodeFilter::CheckInputType(const CMediaType* inMediaType)
 		inMediaType->subtype == MEDIASUBTYPE_Theora &&
 		inMediaType->formattype == FORMAT_Theora)
 	{
-		LOG(logDEBUG) << __FUNCTION__ << " Input type ok";
+		LOG(logDEBUG) << __FUNCTIONW__ << " Input type ok";
 		return S_OK;
 	} 
 
-    LOG(logDEBUG) << __FUNCTION__ << " Input type not ok.";
+    LOG(logDEBUG) << __FUNCTIONW__ << " Input type not ok.";
     if (inMediaType->cbFormat > 7)
     {
         char format[8] = {};
         //strncpy(format, reinterpret_cast<const char*>(inMediaType->pbFormat), 7);
 		strncpy_s(format, 8, reinterpret_cast<const char*>(inMediaType->pbFormat), 7);
-        LOG(logDEBUG) << __FUNCTION__ << " cbFormat start: " << format;
+        LOG(logDEBUG) << __FUNCTIONW__ << " cbFormat start: " << format;
     }
 
 	return S_FALSE;
@@ -353,10 +353,10 @@ HRESULT TheoraDecodeFilter::CheckInputType(const CMediaType* inMediaType)
 
 HRESULT TheoraDecodeFilter::CheckOutputType(const CMediaType* inMediaType)
 {
-    LOG(logDEBUG) << __FUNCTION__ << "\tMajortype: " << inMediaType->majortype;
-    LOG(logDEBUG) << __FUNCTION__ << "\tSubtype: " << inMediaType->subtype;
-    LOG(logDEBUG) << __FUNCTION__ << "\tFormattype: " << inMediaType->formattype;
-    LOG(logDEBUG) << __FUNCTION__ << "\tcbFormat: " << inMediaType->cbFormat;
+    LOG(logDEBUG) << __FUNCTIONW__ << "\tMajortype: " << inMediaType->majortype;
+    LOG(logDEBUG) << __FUNCTIONW__ << "\tSubtype: " << inMediaType->subtype;
+    LOG(logDEBUG) << __FUNCTIONW__ << "\tFormattype: " << inMediaType->formattype;
+    LOG(logDEBUG) << __FUNCTIONW__ << "\tcbFormat: " << inMediaType->cbFormat;
 
 	for (size_t i = 0; i < m_outputMediaTypesList.size(); i++) 
     {
@@ -382,13 +382,13 @@ HRESULT TheoraDecodeFilter::CheckOutputType(const CMediaType* inMediaType)
                 biHeight = locVideoHeader->bmiHeader.biHeight;
             }
 
-            LOG(logDEBUG) << __FUNCTION__ << "\tbiWidth: " << biWidth;
-            LOG(logDEBUG) << __FUNCTION__ << "\tbiHeight:  " << biHeight;
+            LOG(logDEBUG) << __FUNCTIONW__ << "\tbiWidth: " << biWidth;
+            LOG(logDEBUG) << __FUNCTIONW__ << "\tbiHeight:  " << biHeight;
 
             if ((unsigned long)abs(biWidth) < m_theoraFormatInfo->pictureWidth ||
                 (unsigned long)abs(biHeight) < m_theoraFormatInfo->pictureHeight)
             {
-                LOG(logDEBUG) << __FUNCTION__ << " Output type NOT OK (" << i << ")";
+                LOG(logDEBUG) << __FUNCTIONW__ << " Output type NOT OK (" << i << ")";
                 return S_FALSE;
             }
 
@@ -407,13 +407,13 @@ HRESULT TheoraDecodeFilter::CheckTransform(const CMediaType* inInputMediaType, c
 	if (CheckInputType(inInputMediaType) == S_OK && 
         CheckOutputType(inOutputMediaType) == S_OK) 
 	{
-        LOG(logDEBUG) << __FUNCTION__;
+        LOG(logDEBUG) << __FUNCTIONW__;
         ComputeBmiFrameSize(inOutputMediaType);
 		return S_OK;
 	} 
     else 
     {
-		LOG(logDEBUG) << __FUNCTION__ << " FAILED";
+		LOG(logDEBUG) << __FUNCTIONW__ << " FAILED";
 		return S_FALSE;
 	}
 }
@@ -442,9 +442,9 @@ void TheoraDecodeFilter::ComputeBmiFrameSize(const CMediaType* inOutputMediaType
         m_bmiFrameSize = (m_bmiHeight * m_bmiWidth * locVideoHeader->bmiHeader.biBitCount) / 8;
     }
 
-    LOG(logDEBUG) << __FUNCTION__ << "\tbmiWidth: " << m_bmiWidth;
-    LOG(logDEBUG) << __FUNCTION__ << "\tbmiHeight: " << m_bmiHeight;
-    LOG(logDEBUG) << __FUNCTION__ << "\tbmiFrameSize: " << m_bmiFrameSize;
+    LOG(logDEBUG) << __FUNCTIONW__ << "\tbmiWidth: " << m_bmiWidth;
+    LOG(logDEBUG) << __FUNCTIONW__ << "\tbmiHeight: " << m_bmiHeight;
+    LOG(logDEBUG) << __FUNCTIONW__ << "\tbmiFrameSize: " << m_bmiFrameSize;
 }
 
 HRESULT TheoraDecodeFilter::DecideBufferSize(IMemAllocator* inAllocator, ALLOCATOR_PROPERTIES* inPropertyRequest) 
@@ -524,14 +524,14 @@ HRESULT TheoraDecodeFilter::DecideBufferSize(IMemAllocator* inAllocator, ALLOCAT
 		return locHR;
 	}
 
-    LOG(logINFO) << __FUNCTION__ << " Buffer size: " << locActualAlloc.cbBuffer << ", buffers: " << locActualAlloc.cBuffers;
+    LOG(logINFO) << __FUNCTIONW__ << " Buffer size: " << locActualAlloc.cbBuffer << ", buffers: " << locActualAlloc.cBuffers;
 
 	return S_OK;
 }
 
 HRESULT TheoraDecodeFilter::GetMediaType(int inPosition, CMediaType* outOutputMediaType) 
 {
-    LOG(logDEBUG) << __FUNCTION__ << " inPosition: " << inPosition;
+    LOG(logDEBUG) << __FUNCTIONW__ << " inPosition: " << inPosition;
 
 	if (inPosition < 0) 
 	{
@@ -578,7 +578,7 @@ HRESULT TheoraDecodeFilter::GetMediaType(int inPosition, CMediaType* outOutputMe
             biHeight = locVideoFormat->bmiHeader.biHeight;
 		}
 
-        LOG(logDEBUG) << __FUNCTION__ << " Width: " << biWidth << ", Height: " << biHeight; 
+        LOG(logDEBUG) << __FUNCTIONW__ << " Width: " << biWidth << ", Height: " << biHeight; 
 		return S_OK;
 	} 
 	else 
@@ -595,7 +595,7 @@ void TheoraDecodeFilter::ResetFrameCount()
 
 HRESULT TheoraDecodeFilter::NewSegment(REFERENCE_TIME inStart, REFERENCE_TIME inEnd, double inRate) 
 {
-	LOG(logDEBUG) << __FUNCTION__ << " (" << ReferenceTime(inStart) << ", " << ReferenceTime(inEnd) << ", "
+	LOG(logDEBUG) << __FUNCTIONW__ << " (" << ReferenceTime(inStart) << ", " << ReferenceTime(inEnd) << ", "
         << inRate << ")";
 	
     ResetFrameCount();
@@ -614,14 +614,14 @@ HRESULT TheoraDecodeFilter::Receive(IMediaSample* inInputSample)
 
 	if (locHR != S_OK) 
     {
-        LOG(logERROR) << __FUNCTION__ << " Get pointer failed, error: 0x" << std::hex << locHR;	
+        LOG(logERROR) << __FUNCTIONW__ << " Get pointer failed, error: 0x" << std::hex << locHR;	
 		return S_FALSE;
 	}
 
 	if (inInputSample->GetActualDataLength() > 0 && (locBuff[0] & 128) != 0) 
     {
 		//inInputSample->Release();
-        LOG(logDEBUG) << __FUNCTION__ << " This is a header, so ignore it";
+        LOG(logDEBUG) << __FUNCTIONW__ << " This is a header, so ignore it";
         return S_OK;
 	}
 	
@@ -633,7 +633,7 @@ HRESULT TheoraDecodeFilter::Receive(IMediaSample* inInputSample)
 	REFERENCE_TIME locEnd = 0;
 	inInputSample->GetTime(&locStart, &locEnd);
 
-	LOG(logDEBUG) << __FUNCTION__ << " Sample: Size = " << inInputSample->GetActualDataLength() << " Time: " 
+	LOG(logDEBUG) << __FUNCTIONW__ << " Sample: Size = " << inInputSample->GetActualDataLength() << " Time: " 
         << locStart << " - " << locEnd;
 
 	//This packet is given to the decoder or buffered for later
@@ -671,7 +671,7 @@ HRESULT TheoraDecodeFilter::Receive(IMediaSample* inInputSample)
 		locGlobalOffset = locInputPin->GetOutputPinInterface()->getGlobalBaseTime();
 	}
 	
-	LOG(logDEBUG) << __FUNCTION__ << " " << locNumBufferedFrames << " frames buffered";
+	LOG(logDEBUG) << __FUNCTIONW__ << " " << locNumBufferedFrames << " frames buffered";
 
 	for (unsigned long i = 0; i < locNumBufferedFrames; i++) 
     {
@@ -692,7 +692,7 @@ HRESULT TheoraDecodeFilter::Receive(IMediaSample* inInputSample)
             if (locYUV == NULL) 
             {
                 //XTODO::: We need to trash our buffered packets
-                LOG(logERROR) << __FUNCTION__ << " locYUV == NULL";
+                LOG(logERROR) << __FUNCTIONW__ << " locYUV == NULL";
 
                 DeleteBufferedPacketsAfter(i);
                 return S_FALSE;
@@ -704,7 +704,7 @@ HRESULT TheoraDecodeFilter::Receive(IMediaSample* inInputSample)
 			if (locHR != S_OK) 
             {
 				//XTODO::: We need to trash our buffered packets
-                LOG(logERROR) << __FUNCTION__ << " Output sample initialization failed, error: 0x" << std::hex << locHR;
+                LOG(logERROR) << __FUNCTIONW__ << " Output sample initialization failed, error: 0x" << std::hex << locHR;
 				
 				DeleteBufferedPacketsAfter(i);
 				return S_FALSE;
@@ -720,24 +720,24 @@ HRESULT TheoraDecodeFilter::Receive(IMediaSample* inInputSample)
 				locOutSample->Release();
 				DeleteBufferedPacketsAfter(i);
 
-                LOG(logERROR) << __FUNCTION__ << " TheoraDecoded failed!";
+                LOG(logERROR) << __FUNCTIONW__ << " TheoraDecoded failed!";
 				return S_FALSE;
 			} 
             else 
             {
 				//Deliver the sample
-				LOG(logDEBUG) << __FUNCTION__ << " Delivering: " << ReferenceTime(locAdjustedStart) << " to " << 
+				LOG(logDEBUG) << __FUNCTIONW__ << " Delivering: " << ReferenceTime(locAdjustedStart) << " to " << 
                     ReferenceTime(locAdjustedEnd) << (locIsKeyFrame ? " KEYFRAME": " ");
 				
 				locHR = m_pOutput->Deliver(locOutSample);
 				ULONG locTempRefCount = locOutSample->Release();
 
-				LOG(logDEBUG) << __FUNCTION__ << " After deliver refcount = " << locTempRefCount;
+				LOG(logDEBUG) << __FUNCTIONW__ << " After deliver refcount = " << locTempRefCount;
 				
                 if (locHR != S_OK) 
                 {
 					//XTODO::: We need to trash our buffered packets
-                    LOG(logERROR) << __FUNCTION__ << " Delivery failed, error: 0x" << std::hex << locHR;
+                    LOG(logERROR) << __FUNCTIONW__ << " Delivery failed, error: 0x" << std::hex << locHR;
 
 					//locOutSample->Release();
 					DeleteBufferedPacketsAfter(i);
@@ -749,7 +749,7 @@ HRESULT TheoraDecodeFilter::Receive(IMediaSample* inInputSample)
 	}
 
 	m_bufferedPackets.clear();
-	LOG(logDEBUG) << __FUNCTION__ << " Leaving with S_OK";
+	LOG(logDEBUG) << __FUNCTIONW__ << " Leaving with S_OK";
 
 	return S_OK;
 }
@@ -765,13 +765,13 @@ void TheoraDecodeFilter::DeleteBufferedPacketsAfter(unsigned long inPacketIndex)
 }
 HRESULT TheoraDecodeFilter::Transform(IMediaSample* inInputSample, IMediaSample* outOutputSample) 
 {
-	LOG(logDEBUG) << __FUNCTION__ << " NOT IMPLEMENTED";
+	LOG(logDEBUG) << __FUNCTIONW__ << " NOT IMPLEMENTED";
 	return E_NOTIMPL;
 }
 
 void TheoraDecodeFilter::DecodeToRGB565(yuv_buffer* inYUVBuffer, IMediaSample* outSample)
 {
-    LOG(logDEBUG) << __FUNCTION__;
+    LOG(logDEBUG) << __FUNCTIONW__;
 
     BYTE* locBuffer = NULL;
 	outSample->GetPointer(&locBuffer);
@@ -845,13 +845,13 @@ void TheoraDecodeFilter::DecodeToRGB32(yuv_buffer* inYUVBuffer, IMediaSample* ou
         DecodeToRGB32_444(inYUVBuffer, outSample);
         break;
     default:
-        LOG(logERROR) << __FUNCTION__ << " Unhanded pixel format: " << pixelFmt;
+        LOG(logERROR) << __FUNCTIONW__ << " Unhanded pixel format: " << pixelFmt;
     }
 }
 
 void TheoraDecodeFilter::DecodeToRGB32_42x( yuv_buffer* inYUVBuffer, IMediaSample* outSample, bool fullHeight)
 {
-    LOG(logDEBUG) << __FUNCTION__;
+    LOG(logDEBUG) << __FUNCTIONW__;
 
     unsigned char* locBuffer = NULL;
     outSample->GetPointer(&locBuffer);
@@ -914,7 +914,7 @@ void TheoraDecodeFilter::DecodeToRGB32_42x( yuv_buffer* inYUVBuffer, IMediaSampl
 
 void TheoraDecodeFilter::DecodeToRGB32_444( yuv_buffer* inYUVBuffer, IMediaSample* outSample )
 {
-    LOG(logDEBUG) << __FUNCTION__;
+    LOG(logDEBUG) << __FUNCTIONW__;
 
     unsigned char* locBuffer = NULL;
     outSample->GetPointer(&locBuffer);
@@ -958,7 +958,7 @@ void TheoraDecodeFilter::DecodeToRGB32_444( yuv_buffer* inYUVBuffer, IMediaSampl
 
 void TheoraDecodeFilter::DecodeToAYUV(yuv_buffer* inYUVBuffer, IMediaSample* outSample)
 {
-    LOG(logDEBUG) << __FUNCTION__;
+    LOG(logDEBUG) << __FUNCTIONW__;
 
     unsigned char* locBuffer = NULL;
     outSample->GetPointer(&locBuffer);
@@ -1000,14 +1000,14 @@ void TheoraDecodeFilter::DecodeToYUY2(yuv_buffer* inYUVBuffer, IMediaSample* out
         DecodeToYUY2_42x(inYUVBuffer, outSample, true);
         break;
     default:
-        LOG(logERROR) << __FUNCTION__ << " Unhanded pixel format: " << pixelFmt;
+        LOG(logERROR) << __FUNCTIONW__ << " Unhanded pixel format: " << pixelFmt;
     }
 }
 
 
 void TheoraDecodeFilter::DecodeToYUY2_42x(yuv_buffer* inYUVBuffer, IMediaSample* outSample, bool fullHeight)
 {
-    LOG(logDEBUG) << __FUNCTION__;
+    LOG(logDEBUG) << __FUNCTIONW__;
 
     unsigned char* locBuffer = NULL;
     outSample->GetPointer(&locBuffer);
@@ -1042,7 +1042,7 @@ void TheoraDecodeFilter::DecodeToYUY2_42x(yuv_buffer* inYUVBuffer, IMediaSample*
 
 void TheoraDecodeFilter::DecodeToYV12(yuv_buffer* inYUVBuffer, IMediaSample* outSample) 
 {
-    LOG(logDEBUG) << __FUNCTION__;
+    LOG(logDEBUG) << __FUNCTIONW__;
 
 	BYTE* locBuffer = NULL;
 	outSample->GetPointer(&locBuffer);
@@ -1175,13 +1175,13 @@ HRESULT TheoraDecodeFilter::SetMediaType(PIN_DIRECTION inDirection, const CMedia
     {
 		m_currentOutputSubType = inMediaType->subtype;
 		
-        LOG(logDEBUG) << __FUNCTION__ << " SETTING output type";
-        LOG(logDEBUG) << __FUNCTION__ << "\tMajortype: " << inMediaType->majortype;
-        LOG(logDEBUG) << __FUNCTION__ << "\tSubtype: " << inMediaType->subtype;
-        LOG(logDEBUG) << __FUNCTION__ << "\tFormattype: " << inMediaType->formattype;
-        LOG(logDEBUG) << __FUNCTION__ << "\tcbFormat: " << inMediaType->cbFormat;
+        LOG(logDEBUG) << __FUNCTIONW__ << " SETTING output type";
+        LOG(logDEBUG) << __FUNCTIONW__ << "\tMajortype: " << inMediaType->majortype;
+        LOG(logDEBUG) << __FUNCTIONW__ << "\tSubtype: " << inMediaType->subtype;
+        LOG(logDEBUG) << __FUNCTIONW__ << "\tFormattype: " << inMediaType->formattype;
+        LOG(logDEBUG) << __FUNCTIONW__ << "\tcbFormat: " << inMediaType->cbFormat;
 		
-        LOG(logDEBUG) << __FUNCTION__;
+        LOG(logDEBUG) << __FUNCTIONW__;
         ComputeBmiFrameSize(inMediaType);
 
         return CTransformFilter::SetMediaType(PINDIR_OUTPUT, inMediaType);//CVideoTransformFilter::SetMediaType(PINDIR_OUTPUT, inMediaType);
@@ -1461,19 +1461,19 @@ void TheoraDecodeFilter::Setup444MediaTypes()
 
 HRESULT __stdcall TheoraDecodeFilter::Stop()
 {
-    LOG(logDEBUG) << __FUNCTION__;
+    LOG(logDEBUG) << __FUNCTIONW__;
     return CTransformFilter::Stop();
 }
 
 HRESULT __stdcall TheoraDecodeFilter::Pause()
 {
-    LOG(logDEBUG) << __FUNCTION__;
+    LOG(logDEBUG) << __FUNCTIONW__;
     return CTransformFilter::Pause();
 }
 
 HRESULT __stdcall TheoraDecodeFilter::Run(REFERENCE_TIME tStart)
 {
-    LOG(logDEBUG) << __FUNCTION__;
+    LOG(logDEBUG) << __FUNCTIONW__;
     return CTransformFilter::Run(tStart);
 }
 
