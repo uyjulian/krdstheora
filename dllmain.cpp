@@ -4,7 +4,7 @@
 #include <string.h>
 #include <vector>
 
-#include "OggFilterFactory.h"
+#include "ogg/OggFilterFactory.h"
 #ifndef WINCE
 #pragma comment (lib, "winmm")
 #else

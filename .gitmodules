@@ -6,3 +6,18 @@
 	path = external/baseclasses
 	url = https://github.com/uyjulian/baseclasses.git
 	branch = mingw
+[submodule "external/oggdsf"]
+	path = external/oggdsf
+	url = https://github.com/uyjulian/oggdsf.git
+[submodule "external/ogg"]
+	path = external/ogg
+	url = https://github.com/xiph/ogg.git
+	ignore = dirty
+[submodule "external/theora"]
+	path = external/theora
+	url = https://github.com/xiph/theora.git
+	ignore = dirty
+[submodule "external/vorbis"]
+	path = external/vorbis
+	url = https://github.com/xiph/vorbis.git
+	ignore = dirty

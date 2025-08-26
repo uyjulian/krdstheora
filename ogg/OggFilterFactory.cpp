@@ -16,13 +16,13 @@
 #include <dvdmedia.h>
 #endif
 
-#include "oggstdafx.h"
+#include "common/stdafx.h"
 
-#include "oggLog.h"
+#include "common/Log.h"
 
-#include "OggDemuxFilter.h"
-#include "TheoraDecodeFilter.h"
-#include "VorbisDecodeFilter.h"
+#include "dsfOggDemux2/OggDemuxFilter.h"
+#include "dsfTheoraDecoder/TheoraDecodeFilter.h"
+#include "dsfVorbisDecoder/VorbisDecodeFilter.h"
 /*
 C:\ToolDev\kirikiri_vc\krkrz\src\core\visual\win32\krmovie\ogg\src\lib\factory
 
