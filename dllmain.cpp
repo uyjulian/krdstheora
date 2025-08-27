@@ -1,4 +1,5 @@
 #include <windows.h>
+#define EXPORT(hr) extern "C" __declspec(dllexport) hr __stdcall
 #include "tp_stub.h"
 #include <tchar.h>
 #include <string.h>
@@ -47,7 +48,7 @@ BOOL APIENTRY DllMain( HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpRese
 }
 
 static tjs_int GlobalRefCountAtInit = 0;
-extern "C" HRESULT _stdcall V2Link(iTVPFunctionExporter *exporter)
+EXPORT(HRESULT) V2Link(iTVPFunctionExporter *exporter)
 {
 	// スタブの初期化(必ず記述する)
 	TVPInitImportStub(exporter);
@@ -58,7 +59,7 @@ extern "C" HRESULT _stdcall V2Link(iTVPFunctionExporter *exporter)
 	GlobalRefCountAtInit = TVPPluginGlobalRefCount;
 	return S_OK;
 }
-extern "C" HRESULT _stdcall V2Unlink() {
+EXPORT(HRESULT) V2Unlink() {
 	if(TVPPluginGlobalRefCount > GlobalRefCountAtInit) return E_FAIL;
 	
 	TVPUnregisterDSVideoCodec( TJS_W(".ogg"), (void*)&MEDIASUBTYPE_Ogg, tTVPCreateOggFilter, tTVPCreateTheoraFilter, tTVPCreateVorbisFilter, NULL );
